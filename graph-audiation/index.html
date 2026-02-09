@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THREE.js example</title>
+  <link href="./style.css" rel="stylesheet" />
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css"
+    integrity="sha384-Wsr4Nh3yrvMf2KCebJchRJoVo1gTU6kcP05uRSh5NV3sj9+a8IomuJoQzf3sMq4T" crossorigin="anonymous">
+
+  <!-- The loading of KaTeX is deferred to speed up page rendering -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js"
+    integrity="sha384-+W9OcrYK2/bD7BmUAk+xeFAyKp0QjyRQUCxeU31dfyTt/FrPsUgaBTLLkVf33qWt"
+    crossorigin="anonymous"></script>
+
+  <!-- To automatically render math in text elements, include the auto-render extension: -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/contrib/auto-render.min.js"
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+</head>
+
+<body>
+  <aside id="function">\(
+    z = \cos(2x)\sin(y) + 1
+    \)</aside>
+  <aside id="controls">
+    <table>
+      <caption>
+        Controls
+      </caption>
+      <tbody>
+        <tr>
+          <td>left</td>
+
+          <td><kbd>←</kbd></td>
+        </tr>
+        <tr>
+          <td>right</td>
+          <td><kbd>→</kbd></td>
+        </tr>
+        <tr>
+          <td>up</td>
+          <td><kbd>↑</kbd></td>
+        </tr>
+        <tr>
+          <td>down</td>
+          <td><kbd>↓</kbd></td>
+        </tr>
+        <tr>
+          <td>announce</td>
+          <td><kbd>;</kbd></td>
+        </tr>
+        <tr>
+          <td>mute</td>
+          <td><kbd>m</kbd></td>
+        </tr>
+        <tr>
+          <td>toggle help</td>
+          <td><kbd>?</kbd></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 1em;"><label for="voice" style="font-weight: bold;">Voice</label></div>
+    <select id="voice"></select>
+  </aside>
+  <div id="container"></div>
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/"
+        }
+      }
+    </script>
+  <script src="./scene.js" type="module"></script>
+</body>
+
+</html>
