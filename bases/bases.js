@@ -5,7 +5,6 @@
 
   const input = document.querySelector("input");
 
-  const value = parseInt(input.value);
 
   // get the container div
   const container = document.getElementById("table-container");
@@ -70,4 +69,7 @@
 
     generateTables(value);
   });
+
+  // initialize page
+  generateTables(document.querySelector("input").value)
 })();
