@@ -1,0 +1,99 @@
+/* reset styles */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #eee;
+  font-family: sans-serif;
+  padding: 0;
+}
+
+main {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-style: none solid;
+
+  margin: 0 auto;
+  padding: 1em;
+
+  /* viewport units: 1vw = 1% of viewport width, 1vh = 1% of viewport height */
+  max-width: 75%;
+  min-height: 100vh;
+}
+
+h1 {
+  padding: 24px 0;
+}
+
+/* em = current font size */
+p {
+  margin: 1em 0;
+}
+
+#table-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  margin: 1em 0;
+
+  @media (width <= 500px) {
+    flex-direction: column;
+    gap: 1em;
+  }
+}
+
+.bases-table {
+  border-collapse: collapse;
+
+  --radius: 4px;
+  border-radius: var(--radius);
+
+  th,
+  td {
+    text-align: right;
+    padding: 0.5em 1em;
+  }
+
+  /* only th's inside <thead> */
+  > thead th {
+    background-color: rgb(100, 100, 222);
+  }
+
+  td {
+    font-family: monospace;
+  }
+
+  thead > tr:first-child {
+    > :first-child {
+      border-top-left-radius: var(--radius);
+    }
+
+    > :last-child {
+      border-top-right-radius: var(--radius);
+    }
+  }
+
+  /* pseudo-class */
+  tbody > tr {
+    &:nth-child(even) > * {
+      background-color: #ddd;
+    }
+
+    &:nth-child(odd) > * {
+      background-color: #eee;
+    }
+
+    &:last-child {
+      > :first-child {
+        border-bottom-left-radius: var(--radius);
+      }
+
+      > :last-child {
+        border-bottom-right-radius: var(--radius);
+      }
+    }
+  }
+}
+
