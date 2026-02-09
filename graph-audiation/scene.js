@@ -6,12 +6,12 @@ import { lerp, makeScene, truncate } from "./three-utils.js";
 
 // create scene
 const { scene } = makeScene({
-	camera: {
-		position: [5.92, -2.05, 5.06],
-		up: [0, 0, 1], // math convention
-	},
-	container: document.getElementById("container"),
-	controls: OrbitControls,
+  camera: {
+    position: [5.92, -2.05, 5.06],
+    up: [0, 0, 1], // math convention
+  },
+  container: document.getElementById("container"),
+  controls: OrbitControls,
 });
 
 // add lights
@@ -19,19 +19,19 @@ const ambientLight = new THREE.AmbientLight(undefined, 0.1);
 scene.add(ambientLight);
 
 const pointLights = [
-	{ position: [0, 5, 5], intensity: Math.PI, decay: 0 },
-	{ position: [0, 0, -2], intensity: Math.PI },
+  { position: [0, 5, 5], intensity: Math.PI, decay: 0 },
+  { position: [0, 0, -2], intensity: Math.PI },
 ];
 
 for (const config of pointLights) {
-	const pointLight = new THREE.PointLight(
-		config.color,
-		config.intensity,
-		config.distance,
-		config.decay,
-	);
-	pointLight.position.set(...[0, 5, 5]);
-	scene.add(pointLight);
+  const pointLight = new THREE.PointLight(
+    config.color,
+    config.intensity,
+    config.distance,
+    config.decay,
+  );
+  pointLight.position.set(...[0, 5, 5]);
+  scene.add(pointLight);
 }
 
 // axes helper
@@ -43,35 +43,35 @@ let minZ, maxZ;
 
 // parametric surface
 {
-	const geometry = new ParametricGeometry(
-		(u, v, target) => {
-			const x = lerp(-5, 5, u);
-			const y = lerp(-5, 5, v);
-			const z = fn(x, y);
+  const geometry = new ParametricGeometry(
+    (u, v, target) => {
+      const x = lerp(-5, 5, u);
+      const y = lerp(-5, 5, v);
+      const z = fn(x, y);
 
-			if (minZ === undefined) {
-				minZ = z;
-			} else {
-				minZ = Math.min(z, minZ);
-			}
-			if (maxZ === undefined) {
-				maxZ = z;
-			} else {
-				maxZ = Math.max(z, maxZ);
-			}
-			target.set(x, y, z);
-		},
-		64,
-		64,
-	);
-	const material = new THREE.MeshPhongMaterial({
-		color: 0x00ff00,
-		opacity: 0.5,
-		side: THREE.DoubleSide,
-		transparent: true,
-	});
-	const surface = new THREE.Mesh(geometry, material);
-	scene.add(surface);
+      if (minZ === undefined) {
+        minZ = z;
+      } else {
+        minZ = Math.min(z, minZ);
+      }
+      if (maxZ === undefined) {
+        maxZ = z;
+      } else {
+        maxZ = Math.max(z, maxZ);
+      }
+      target.set(x, y, z);
+    },
+    64,
+    64,
+  );
+  const material = new THREE.MeshPhongMaterial({
+    color: 0x00ff00,
+    opacity: 0.5,
+    side: THREE.DoubleSide,
+    transparent: true,
+  });
+  const surface = new THREE.Mesh(geometry, material);
+  scene.add(surface);
 }
 
 /**
@@ -80,13 +80,13 @@ let minZ, maxZ;
  */
 let input;
 {
-	const geometry = new THREE.SphereGeometry(0.1, 32, 32);
-	const material = new THREE.MeshPhongMaterial({
-		color: 0xff0000,
-		side: THREE.DoubleSide,
-	});
-	input = new THREE.Mesh(geometry, material);
-	scene.add(input);
+  const geometry = new THREE.SphereGeometry(0.1, 32, 32);
+  const material = new THREE.MeshPhongMaterial({
+    color: 0xff0000,
+    side: THREE.DoubleSide,
+  });
+  input = new THREE.Mesh(geometry, material);
+  scene.add(input);
 }
 
 /**
@@ -95,14 +95,14 @@ let input;
  */
 let output;
 {
-	const geometry = new THREE.SphereGeometry(0.1, 32, 32);
-	const material = new THREE.MeshPhongMaterial({
-		color: 0xff00ff,
-		side: THREE.DoubleSide,
-	});
-	output = new THREE.Mesh(geometry, material);
-	setOutputPosition();
-	scene.add(output);
+  const geometry = new THREE.SphereGeometry(0.1, 32, 32);
+  const material = new THREE.MeshPhongMaterial({
+    color: 0xff00ff,
+    side: THREE.DoubleSide,
+  });
+  output = new THREE.Mesh(geometry, material);
+  setOutputPosition();
+  scene.add(output);
 }
 output;
 
@@ -110,41 +110,41 @@ output;
 const step = 0.1;
 
 function setOutputPosition() {
-	const { x, y } = input.position;
-	output.position.set(x, y, fn(x, y));
+  const { x, y } = input.position;
+  output.position.set(x, y, fn(x, y));
 }
-
 
 // keyboard interaction
 document.body.addEventListener("keydown", (e) => {
-	console.log(e);
-	switch (e.key) {
-		case "ArrowLeft":
-			input.position.setX(input.position.x - step);
-			break;
-		case "ArrowRight":
-			input.position.setX(input.position.x + step);
-			break;
-		case "ArrowUp":
-			input.position.setY(input.position.y + step);
-			break;
-		case "ArrowDown":
-			input.position.setY(input.position.y - step);
-			break;
-		case "?":
-			document.getElementById("controls").classList.toggle("hidden");
-			break;
-		case " ":
-			playPitch(output.position.z);
-			break;
-		case ";":
-			let { x, y, z } = output.position;
-			[x, y, z] = [x, y, z].map((t) => truncate(t));
-			speak(`x: ${x}, y: ${y}, z: ${z}`);
-			break;
-	}
+  console.log(e);
+  switch (e.key) {
+    case "ArrowLeft":
+      input.position.setX(input.position.x - step);
+      break;
+    case "ArrowRight":
+      input.position.setX(input.position.x + step);
+      break;
+    case "ArrowUp":
+      input.position.setY(input.position.y + step);
+      break;
+    case "ArrowDown":
+      input.position.setY(input.position.y - step);
+      break;
+    case "?":
+      document.getElementById("controls").classList.toggle("hidden");
+      break;
+    case " ":
+      playPitch(output.position.z);
+      break;
+    case ";": {
+      let { x, y, z } = output.position;
+      [x, y, z] = [x, y, z].map((t) => truncate(t));
+      speak(`x: ${x}, y: ${y}, z: ${z}`);
+      break;
+    }
+  }
 
-	setOutputPosition();
+  setOutputPosition();
 });
 
 // MDN voice example
@@ -155,77 +155,76 @@ const voiceSelect = document.querySelector("select");
 let voices = [];
 
 function populateVoiceList() {
-	voices = synth.getVoices()
-		.filter(voice =>
-			voice.lang.startsWith("en-")
-		)
-		.sort(function (a, b) {
-			const aname = a.name.toUpperCase();
-			const bname = b.name.toUpperCase();
+  voices = synth
+    .getVoices()
+    .filter((voice) => voice.lang.startsWith("en-"))
+    .sort((a, b) => {
+      const aname = a.name.toUpperCase();
+      const bname = b.name.toUpperCase();
 
-			if (aname < bname) {
-				return -1;
-			} else if (aname == bname) {
-				return 0;
-			} else {
-				return +1;
-			}
-		});
-	const selectedIndex =
-		voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
-	voiceSelect.innerHTML = "";
+      if (aname < bname) {
+        return -1;
+      } else if (aname === bname) {
+        return 0;
+      } else {
+        return +1;
+      }
+    });
+  const selectedIndex =
+    voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
+  voiceSelect.innerHTML = "";
 
-	for (let i = 0; i < voices.length; i++) {
-		const option = document.createElement("option");
-		option.textContent = `${voices[i].name} (${voices[i].lang})`;
+  for (let i = 0; i < voices.length; i++) {
+    const option = document.createElement("option");
+    option.textContent = `${voices[i].name} (${voices[i].lang})`;
 
-		if (voices[i].default) {
-			option.textContent += " -- DEFAULT";
-		}
+    if (voices[i].default) {
+      option.textContent += " -- DEFAULT";
+    }
 
-		option.setAttribute("data-lang", voices[i].lang);
-		option.setAttribute("data-name", voices[i].name);
-		voiceSelect.appendChild(option);
-	}
-	voiceSelect.selectedIndex = selectedIndex;
+    option.setAttribute("data-lang", voices[i].lang);
+    option.setAttribute("data-name", voices[i].name);
+    voiceSelect.appendChild(option);
+  }
+  voiceSelect.selectedIndex = selectedIndex;
 }
 
 populateVoiceList();
 
 if (speechSynthesis.onvoiceschanged !== undefined) {
-	speechSynthesis.onvoiceschanged = populateVoiceList;
+  speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 
 function speak(text) {
-	if (synth.speaking) {
-		console.error("speechSynthesis.speaking");
-		return;
-	}
+  if (synth.speaking) {
+    console.error("speechSynthesis.speaking");
+    return;
+  }
 
-	if (text === "") return;
+  if (text === "") return;
 
-	const utterThis = new SpeechSynthesisUtterance(text);
+  const utterThis = new SpeechSynthesisUtterance(text);
 
-	utterThis.onend = function (event) {
-		console.log("SpeechSynthesisUtterance.onend");
-	};
+  utterThis.onend = () => {
+    console.log("SpeechSynthesisUtterance.onend");
+  };
 
-	utterThis.onerror = function (event) {
-		console.error("SpeechSynthesisUtterance.onerror");
-	};
+  utterThis.onerror = () => {
+    console.error("SpeechSynthesisUtterance.onerror");
+  };
 
-	const selectedOption =
-		voiceSelect.selectedOptions[0].getAttribute("data-name");
+  const selectedOption =
+    voiceSelect.selectedOptions[0].getAttribute("data-name");
 
-	for (let i = 0; i < voices.length; i++) {
-		if (voices[i].name === selectedOption) {
-			utterThis.voice = voices[i];
-			break;
-		}
-	}
-	// utterThis.pitch = pitch.value;
-	// utterThis.rate = rate.value;
-	synth.speak(utterThis);
+  for (let i = 0; i < voices.length; i++) {
+    if (voices[i].name === selectedOption) {
+      utterThis.voice = voices[i];
+      break;
+    }
+  }
+  // utterThis.pitch = pitch.value;
+  // utterThis.rate = rate.value;
+  synth.speak(utterThis);
 }
 
 // pitches
@@ -233,27 +232,27 @@ function speak(text) {
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playPitch(z) {
-	const oscillator = audioCtx.createOscillator();
-	const gainNode = audioCtx.createGain();
-	const duration = 0.5;
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+  const duration = 0.5;
 
-	// remap pitch to [0, 1]
-	const pitch = (z - minZ) / (maxZ - minZ);
+  // remap pitch to [0, 1]
+  const pitch = (z - minZ) / (maxZ - minZ);
 
-	// Frequency range: C4 to A5
-	const minFreq = 261.63;
-	const maxFreq = 880;
+  // Frequency range: C4 to A5
+  const minFreq = 261.63;
+  const maxFreq = 880;
 
-	const frequency = lerp(minFreq, maxFreq, pitch);
+  const frequency = lerp(minFreq, maxFreq, pitch);
 
-	oscillator.type = "sine"; // try "square", "sawtooth", etc.
-	oscillator.frequency.value = frequency;
+  oscillator.type = "sine"; // try "square", "sawtooth", etc.
+  oscillator.frequency.value = frequency;
 
-	gainNode.gain.value = 0.2; // keep it gentle
+  gainNode.gain.value = 0.2; // keep it gentle
 
-	oscillator.connect(gainNode);
-	gainNode.connect(audioCtx.destination);
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
 
-	oscillator.start();
-	oscillator.stop(audioCtx.currentTime + duration);
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + duration);
 }
