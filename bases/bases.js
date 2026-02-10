@@ -61,7 +61,7 @@
   }
 
   // input events
-  document.addEventListener("input", input, () => {
+  input.addEventListener("input", () => {
     container.children.length = 0;
 
     const value = parseInt(input.value, 10);
