@@ -19,8 +19,14 @@
     "module": "preserve",
     "sourceMap": true,
 
-
     /* If your code runs in the DOM: */
-    "lib":  ["dom", "es2022", "dom.iterable"]
+    "lib": ["es2022", "dom", "dom.iterable"],
+
+    // for ES modules
+    "rewriteRelativeImportExtensions": true,
+    "baseUrl": ".", // Base directory for resolving non-relative module names
+    "paths": {
+      "/*": ["./*"]
+    }
   }
 }
