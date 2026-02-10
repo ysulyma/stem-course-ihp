@@ -62,7 +62,7 @@
 
   // input events
   input.addEventListener("input", () => {
-    container.children.length = 0;
+    container.replaceChildren();
 
     const value = parseInt(input.value, 10);
 
