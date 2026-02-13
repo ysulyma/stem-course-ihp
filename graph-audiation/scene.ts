@@ -31,7 +31,7 @@ type LightConfig = {
   decay?: number;
   distance?: number;
   intensity?: number;
-  position?: Pt3;
+  position: Pt3;
 };
 
 const pointLights: LightConfig[] = [
@@ -46,7 +46,7 @@ for (const config of pointLights) {
     config.distance,
     config.decay,
   );
-  pointLight.position.set(...[0, 5, 5]);
+  pointLight.position.set(...config.position);
   scene.add(pointLight);
 }
 
