@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #fff;
+  font-family: "Roboto Slab", sans-serif;
+}
+
+#three-container {
+  height: 65vh;
+  width: 50vw;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#two-container {
+  height: 65vh;
+  width: 50vw;
+
+  position: absolute;
+  left: 50vw;
+  top: 0;
+}
+
+#controls {
+  background-color: #222;
+  box-sizing: border-box;
+  height: 35vh;
+  width: 100vw;
+  padding: 1em;
+
+  position: absolute;
+  top: 65vh;
+}
+
+#controls-left {
+  position: absolute;
+  left: 0;
+}
+
+#controls-right {
+  position: absolute;
+  left: 50vw;
+  padding-left: 1em;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 1em 0.5em;
+}
+
+th {
+  text-align: right;
+  vertical-align: top;
+}
+
+#function-input,
+input[type="number"] {
+  background-color: #333;
+  border: 0 none transparent;
+  color: #fff;
+  padding: 4px;
+  width: 20em;
+}
+
+input[type="number"] {
+  font-size: 1em;
+}
+
+#function-input {
+  width: 20em;
+}
+
+#graph-text,
+#disks-text {
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+}
+
+#graph-text {
+  color: #00aeff;
+}
+
+#disks-text {
+  color: #5cc26d;
+}
+
+#toggle-graph {
+  cursor: pointer;
+  vertical-align: top;
+}
+
+/* get MathJax to stop being a dumbass */
+.MathJax:focus {
+  outline: none;
+}
+
+.MathJax :link {
+  font-size: 0.9em;
+  font-weight: normal;
+}
+
+small {
+  font-size: 0.1em;
+  vertical-align: top;
+}
