@@ -14,25 +14,21 @@ main {
   height: 70vh;
 }
 
-#elliptic {
-  background: #ccc;
-  border-radius: 0.2em;
-  aspect-ratio: 1;
-
+#elliptic line {
   line {
     stroke: #000;
   }
 }
 
-#moduli {
-  background: #ccc;
-  border-radius: 0.2em;
-
+figure {
   aspect-ratio: 1;
+  background-color: light-dark(#ccc, #333);
+  background-image: url("./grid.png");
+  border-radius: 0.2em;
 }
 
 #controls {
-  background: #ccc;
+  background: light-dark(#ccc, #333);
   border-radius: 0.2em;
   font-size: 1.5em;
   padding: 0.5em;

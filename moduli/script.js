@@ -44,15 +44,10 @@ for (const config of pointLights) {
   scene.add(pointLight);
 }
 
-// axes helper
-scene.add(new THREE.AxesHelper(5));
-
 const state = {
   a: document.getElementById("range-a").valueAsNumber,
   b: document.getElementById("range-b").valueAsNumber,
 };
-
-window.scene = scene;
 
 /**
  * Generate the moduli of elliptic curves
