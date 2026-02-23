@@ -28,8 +28,6 @@ export function makeScene<TEventMap extends {}>({
   // create a scene
   const scene = new THREE.Scene();
 
-  console.log("hello world!");
-
   // create a camera
   const rect = container.getBoundingClientRect();
   const camera = new THREE.PerspectiveCamera(

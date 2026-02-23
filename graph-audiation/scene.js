@@ -25,7 +25,7 @@ const pointLights = [
 ];
 for (const config of pointLights) {
     const pointLight = new THREE.PointLight(config.color, config.intensity, config.distance, config.decay);
-    pointLight.position.set(...[0, 5, 5]);
+    pointLight.position.set(...config.position);
     scene.add(pointLight);
 }
 // axes helper
