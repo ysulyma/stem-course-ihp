@@ -1,0 +1,49 @@
+:root {
+  color-scheme: ligth dark;
+  font-family: sans-serif;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#figures {
+  display: flex;
+  height: 70vh;
+}
+
+#elliptic {
+  background: #ccc;
+  border-radius: 0.2em;
+  aspect-ratio: 1;
+
+  line {
+    stroke: #000;
+  }
+}
+
+#moduli {
+  background: #ccc;
+  border-radius: 0.2em;
+
+  aspect-ratio: 1;
+}
+
+#controls {
+  background: #ccc;
+  border-radius: 0.2em;
+  font-size: 1.5em;
+  padding: 0.5em;
+  width: 30%;
+
+  > table {
+    margin: 0 auto;
+  }
+
+  input[type="number"] {
+    font-size: 1em;
+    width: 6ch;
+  }
+}
