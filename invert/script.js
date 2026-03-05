@@ -52,16 +52,16 @@ testRegion.after(grid);
 grid.after(graph(f, a, b));
 /* ------------------------- update elements from state ------------------------- */
 function update() {
+    const uncertainty = (b - a) * 2 ** -state.iteration;
+    const lowerBound = state.x.toFixed(4);
+    const upperBound = (state.x + uncertainty).toFixed(4);
     // whether to show the x guess or not
     document.body.classList.toggle("show-x", state.showX);
     // test region
-    const uncertainty = (b - a) * 2 ** -state.iteration;
     testRegion.setAttribute("width", String(uncertainty));
     // pause/resume text
     pauseResumeButton.textContent = state.paused ? "Resume" : "Pause";
     /* ---------- update KaTeX ---------- */
-    const lowerBound = state.x.toFixed(4);
-    const upperBound = (state.x + uncertainty).toFixed(4);
     katex.render(String.raw `${lowerBound} \le x \le ${upperBound}`, xValue);
     katex.render(`y = ${state.y.toFixed(4)}`, yValue);
     /* ---------- update x attributes ---------- */
