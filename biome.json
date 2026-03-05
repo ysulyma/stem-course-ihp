@@ -29,6 +29,11 @@
     },
     "enabled": true
   },
+  "css": {
+    "formatter": {
+      "enabled": true
+    }
+  },
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -57,6 +62,9 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
       "complexity": {
         "noUselessConstructor": "off"
       },

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js";
-import { makeMeshDraggable, screenToScene } from "./drag-utils.js";
+import { makeMeshDraggable, screenToScene } from "./drag-utils-3d.js";
 import { makeScene } from "/lib/three-utils.js";
 const mobiusRadius = 2;
 const { cos, sin, PI } = Math, TWOPI = 2 * PI;

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js";
 
-import { makeMeshDraggable, screenToScene } from "./drag-utils.js";
+import { makeMeshDraggable, screenToScene } from "./drag-utils-3d.js";
 
 import { makeScene, type Pt3 } from "/lib/three-utils.js";
 

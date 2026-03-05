@@ -1,0 +1,179 @@
+:root {
+  color-scheme: light dark;
+
+  --stroke-major: light-dark(#000, #fff);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: sans-serif;
+  padding: 1em;
+}
+
+.draggable {
+  cursor: grab;
+  cursor: -webkit-grab;
+  pointer-events: all;
+}
+
+body.dragging,
+body.dragging .draggable {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+svg {
+  display: block;
+
+  * {
+    pointer-events: none;
+  }
+}
+
+@media (min-aspect-ratio: 8 / 5) {
+  svg {
+    width: calc(100vh - 2em);
+  }
+
+  form {
+    left: calc(100vh + 2em);
+  }
+}
+
+@media (max-aspect-ratio: 8 / 5) {
+  svg {
+    width: 62.5vw;
+  }
+
+  form {
+    left: calc(62.5vw + 2em);
+  }
+}
+
+.plot {
+  fill: none;
+  stroke: #ae81ff;
+  stroke-width: 0.05;
+}
+
+.point-y {
+  cursor: grab;
+  fill: #1a69b5;
+}
+
+.line-y {
+  stroke-dasharray: 0.05 0.05;
+  stroke: #1a69b5;
+  stroke-width: 0.01;
+}
+
+.point-x {
+  fill: #a52117;
+}
+
+.line-x {
+  stroke-dasharray: 0.05 0.05;
+  stroke: #a52117;
+  stroke-width: 0.01;
+}
+
+/* mobile dragging */
+.fat-fingers {
+  fill: transparent;
+}
+
+@media (any-hover: hover) {
+  .fat-fingers {
+    display: none;
+  }
+}
+
+/* form */
+form {
+  position: absolute;
+  top: 1em;
+
+  > span {
+    display: block;
+    font-size: 2em;
+    margin: 2em 0;
+  }
+}
+
+button {
+  border-radius: 2px;
+  box-shadow: 0 0 2px #000;
+  border: none;
+  color: #fff;
+  display: block;
+  font-size: 2em;
+  padding: 0.2em;
+  user-select: none;
+}
+
+#find-inverse {
+  background: #1bbb68;
+
+  &:active {
+    background: #169653;
+  }
+}
+
+#test-region {
+  fill: #169653;
+  fill-opacity: 0.5;
+}
+
+#pause-resume {
+  background: #ff0;
+  color: #444;
+  margin: 1em 0;
+
+  &:active {
+    background: #dd0;
+  }
+}
+
+/* hiding */
+.point-x,
+.line-x,
+#x-approx,
+#test-region,
+#pause-resume {
+  visibility: hidden;
+
+  .show-x & {
+    visibility: visible;
+  }
+}
+
+/* grid */
+.gridline {
+  stroke: #666;
+  stroke-width: 0.01;
+}
+
+.major-axis {
+  stroke: var(--stroke-major);
+  stroke-width: 0.08;
+}
+
+.axis-label {
+  fill: var(--stroke-major);
+  font-size: 0.04ex;
+  text-anchor: middle;
+  stroke: none;
+}
+
+.axis-tick {
+  stroke: #777;
+  stroke-width: 0.05;
+}

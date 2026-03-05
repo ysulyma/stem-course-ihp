@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inverting monotonic functions</title>
+    <link href="./style.css" rel="stylesheet">
+
+    <!-- KaTeX -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css"
+      integrity="sha384-Wsr4Nh3yrvMf2KCebJchRJoVo1gTU6kcP05uRSh5NV3sj9+a8IomuJoQzf3sMq4T"
+      crossorigin="anonymous"
+    >
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js"
+      integrity="sha384-+W9OcrYK2/bD7BmUAk+xeFAyKp0QjyRQUCxeU31dfyTt/FrPsUgaBTLLkVf33qWt"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- To automatically render math in text elements, include the auto-render extension: -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/contrib/auto-render.min.js"
+      integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh"
+      crossorigin="anonymous"
+      onload="renderMathInElement(document.body);"
+    ></script>
+  </head>
+
+  <body>
+    <main>
+      <svg viewBox="-5 -5 10 10">
+        <rect id="test-region" y="-5" height="10" x="0" width="0" />
+
+        <line class="line-x" x1="0" x2="0" y1="-5" y2="5" />
+        <line class="line-y" x1="-5" x2="5" y1="0" y2="0" />
+
+        <circle class="point-x" cx="0" cy="0" r="0.1" />
+        <circle class="draggable point-y" cx="0" cy="0" r="0.1" />
+        <circle class="draggable fat-fingers" cx="0" cy="0" r="0.3" />
+      </svg>
+
+      <form>
+        \[ y = \frac{x^5}{120} + e^ { x/2} \]
+
+        <div id="y-value">\[ y = 0.0000 \]</div>
+        <div id="x-approx"></div>
+        <button id="find-inverse" type="button">Find inverse</button>
+        <button id="pause-resume" type="button">Pause</button>
+      </form>
+    </main>
+
+    <script src="./script.js" type="module"></script>
+  </body>
+</html>
