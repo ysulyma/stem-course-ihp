@@ -4,9 +4,6 @@ import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.j
 import { lerp, makeScene, truncate } from "/lib/three-utils.js";
 import { $, $e } from "/lib/utils.js";
 const container = document.getElementById("container");
-if (!container) {
-    throw new Error("could not find element with id 'container'");
-}
 // create scene
 const { scene } = makeScene({
     camera: {
@@ -25,6 +22,8 @@ const pointLights = [
 ];
 for (const config of pointLights) {
     const pointLight = new THREE.PointLight(config.color, config.intensity, config.distance, config.decay);
+    // js syntax:
+    // fn(...[x, y, z]) is equivalent to fn(x, y, z)
     pointLight.position.set(...config.position);
     scene.add(pointLight);
 }
@@ -111,9 +110,14 @@ document.body.addEventListener("keydown", (e) => {
         case "ArrowDown":
             input.position.setY(input.position.y - step);
             break;
-        case "?":
-            document.getElementById("controls").classList.toggle("hidden");
+        case "?": {
+            const controls = document.getElementById("controls");
+            if (!controls) {
+                throw new Error("could not find element with id 'controls'");
+            }
+            controls.classList.toggle("hidden");
             break;
+        }
         case " ":
             playPitch(output.position.z);
             break;
@@ -207,4 +211,5 @@ function playPitch(z) {
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + duration);
 }
+//# sourceMappingURL=scene.js.map
 //# sourceMappingURL=scene.js.map

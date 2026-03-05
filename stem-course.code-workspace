@@ -10,9 +10,8 @@
       "**/.git": true,
       "**/.hg": true,
       "**/.svn": true,
-      "**/*.js": true,
-      "**/*.js.map": true,
-      "**/Thumbs.db": true
+      "**/Thumbs.db": true,
+      "**/*.js.map": true
     },
     "typescript.tsdk": "node_modules/typescript/lib"
   }

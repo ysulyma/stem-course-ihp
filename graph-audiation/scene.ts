@@ -1,16 +1,13 @@
-import type { ColorRepresentation } from "three";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js";
 
-import { lerp, makeScene, type Pt3, truncate } from "/lib/three-utils.js";
+import { lerp, makeScene, truncate } from "/lib/three-utils.js";
 import { $, $e } from "/lib/utils.js";
 
-const container = document.getElementById("container");
+type Pt3 = [number, number, number];
 
-if (!container) {
-  throw new Error("could not find element with id 'container'");
-}
+const container = document.getElementById("container")!;
 
 // create scene
 const { scene } = makeScene({
@@ -27,7 +24,7 @@ const ambientLight = new THREE.AmbientLight(undefined, 0.1);
 scene.add(ambientLight);
 
 type LightConfig = {
-  color?: ColorRepresentation;
+  color?: THREE.Color;
   decay?: number;
   distance?: number;
   intensity?: number;
@@ -38,7 +35,6 @@ const pointLights: LightConfig[] = [
   { decay: 0, intensity: Math.PI, position: [0, 5, 5] },
   { intensity: Math.PI, position: [0, 0, -2] },
 ];
-
 for (const config of pointLights) {
   const pointLight = new THREE.PointLight(
     config.color,
@@ -46,17 +42,14 @@ for (const config of pointLights) {
     config.distance,
     config.decay,
   );
+
   pointLight.position.set(...config.position);
   scene.add(pointLight);
 }
-
 // axes helper
 scene.add(new THREE.AxesHelper(5));
-
 const fn = (x: number, y: number) => Math.cos(2 * x) * Math.sin(y) + 1;
-
 let minZ: number, maxZ: number;
-
 // parametric surface
 {
   const geometry = new ParametricGeometry(
@@ -64,7 +57,6 @@ let minZ: number, maxZ: number;
       const x = lerp(-5, 5, u);
       const y = lerp(-5, 5, v);
       const z = fn(x, y);
-
       if (minZ === undefined) {
         minZ = z;
       } else {
@@ -89,7 +81,6 @@ let minZ: number, maxZ: number;
   const surface = new THREE.Mesh(geometry, material);
   scene.add(surface);
 }
-
 /**
  * input (x, y, 0) point
  */
@@ -103,7 +94,6 @@ let input: THREE.Mesh;
   input = new THREE.Mesh(geometry, material);
   scene.add(input);
 }
-
 /**
  * output (x, y, z) point
  */
@@ -119,15 +109,12 @@ let output: THREE.Mesh;
   scene.add(output);
 }
 output;
-
 /** amount to move the point by */
 const step = 0.1;
-
 function setOutputPosition() {
   const { x, y } = input.position;
   output.position.set(x, y, fn(x, y));
 }
-
 // keyboard interaction
 document.body.addEventListener("keydown", (e) => {
   console.log(e);
@@ -144,30 +131,32 @@ document.body.addEventListener("keydown", (e) => {
     case "ArrowDown":
       input.position.setY(input.position.y - step);
       break;
-    case "?":
-      document.getElementById("controls")!.classList.toggle("hidden");
+    case "?": {
+      const controls = document.getElementById("controls");
+      if (!controls) {
+        throw new Error("could not find element with id 'controls'");
+      }
+
+      controls.classList.toggle("hidden");
       break;
+    }
     case " ":
       playPitch(output.position.z);
       break;
     case ";": {
       let { x, y, z } = output.position;
+
       [x, y, z] = [x, y, z].map((t) => truncate(t)) as Pt3;
       speak(`x: ${x}, y: ${y}, z: ${z}`);
       break;
     }
   }
-
   setOutputPosition();
 });
-
 // MDN voice example
 const synth = window.speechSynthesis;
-
 const voiceSelect = $("select")!;
-
 let voices: SpeechSynthesisVoice[] = [];
-
 function populateVoiceList() {
   voices = synth
     .getVoices()
@@ -175,7 +164,6 @@ function populateVoiceList() {
     .sort((a, b) => {
       const aname = a.name.toUpperCase();
       const bname = b.name.toUpperCase();
-
       if (aname < bname) {
         return -1;
       } else if (aname === bname) {
@@ -187,84 +175,63 @@ function populateVoiceList() {
   const selectedIndex =
     voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
   voiceSelect.innerHTML = "";
-
   for (const voice of voices) {
     const option = $e("option");
     option.textContent = `${voice.name} (${voice.lang})`;
-
     if (voice.default) {
       option.textContent += " -- DEFAULT";
     }
-
     option.setAttribute("data-lang", voice.lang);
     option.setAttribute("data-name", voice.name);
     voiceSelect.appendChild(option);
   }
   voiceSelect.selectedIndex = selectedIndex;
 }
-
 populateVoiceList();
-
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
-
 function speak(text: string) {
   if (synth.speaking) {
     console.error("speechSynthesis.speaking");
     return;
   }
-
   if (text === "") return;
-
   const utterThis = new SpeechSynthesisUtterance(text);
-
   utterThis.onend = () => {
     console.log("SpeechSynthesisUtterance.onend");
   };
-
   utterThis.onerror = () => {
     console.error("SpeechSynthesisUtterance.onerror");
   };
-
   const selectedOption =
-    voiceSelect.selectedOptions[0]!.getAttribute("data-name");
-
+    voiceSelect.selectedOptions[0].getAttribute("data-name");
   utterThis.voice = voices.find((voice) => voice.name === selectedOption)!;
-
   // utterThis.pitch = pitch.value;
   // utterThis.rate = rate.value;
   synth.speak(utterThis);
 }
-
 // pitches
 // https://github.com/ysulyma/stem-course/blob/main/content/framework/app/audio-graph-3d/client.tsx
 const audioCtx =
   new // biome-ignore lint/suspicious/noExplicitAny: safari compatibility
   (window.AudioContext || (window as any).webkitAudioContext)();
-
 function playPitch(z: number) {
   const oscillator = audioCtx.createOscillator();
   const gainNode = audioCtx.createGain();
   const duration = 0.5;
-
   // remap pitch to [0, 1]
   const pitch = (z - minZ) / (maxZ - minZ);
-
   // Frequency range: C4 to A5
   const minFreq = 261.63;
   const maxFreq = 880;
-
   const frequency = lerp(minFreq, maxFreq, pitch);
-
   oscillator.type = "sine"; // try "square", "sawtooth", etc.
   oscillator.frequency.value = frequency;
-
   gainNode.gain.value = 0.2; // keep it gentle
-
   oscillator.connect(gainNode);
   gainNode.connect(audioCtx.destination);
-
   oscillator.start();
   oscillator.stop(audioCtx.currentTime + duration);
 }
+//# sourceMappingURL=scene.js.map
