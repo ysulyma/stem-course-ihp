@@ -44,9 +44,15 @@ for (const config of pointLights) {
   scene.add(pointLight);
 }
 
+const viewBox = document.querySelector("svg").viewBox.baseVal;
+
 const state = {
-  a: document.getElementById("range-a").valueAsNumber,
-  b: document.getElementById("range-b").valueAsNumber,
+  a: document.querySelector("#range-a").valueAsNumber,
+  b: document.querySelector("#range-b").valueAsNumber,
+  xMax: viewBox.x + viewBox.width,
+  xMin: viewBox.x,
+  yMax: viewBox.y + viewBox.height,
+  yMin: viewBox.y,
 };
 
 /**
@@ -57,12 +63,12 @@ function generateModuli() {
 
   const resolution = 64;
 
-  const moduliGeometry = marchingCubes(
-    (x, y, z) => y ** 2 - x ** 3 - z * x - state.b,
-    -5,
-    5,
-    resolution,
-  );
+  const moduliGeometry = marchingCubes({
+    axisMax: 5,
+    axisMin: -5,
+    fn: (x, y, z) => y ** 2 - x ** 3 - z * x - state.b,
+    size: resolution,
+  });
 
   if (existing) {
     existing.geometry = moduliGeometry;
@@ -86,18 +92,19 @@ function generateCrossSection() {
   const existing = scene.getObjectByName("section");
   const resolution = 64;
 
-  const edges = marchingSquares(
-    -5,
-    5,
-    -5,
-    5,
-    (x, y) => y ** 2 - x ** 3 - state.a * x - state.b + state.a,
-    state.a,
+  /** @type {[number, number, number][]} */
+  const edges = marchingSquares({
+    c: state.a,
     resolution,
-  );
+    xMax: 5,
+    xMin: -5,
+    yMax: 5,
+    yMin: -5,
+    zFunc: (x, y) => y ** 2 - x ** 3 - state.a * x - state.b + state.a,
+  });
 
   const lineGeometry = new LineSegmentsGeometry().setPositions(
-    edges.reduce((a, b) => a.concat(b)),
+    edges.reduce((acc, curr) => acc.concat(curr)),
   );
 
   if (existing) {
@@ -117,15 +124,15 @@ function generateCrossSection() {
 const curve = document.getElementById("svg-curve");
 
 function update2D() {
-  const edges = marchingSquares(
-    -5,
-    5,
-    -5,
-    5,
-    (x, y) => y ** 2 - x ** 3 - state.a * x - state.b,
-    0,
-    128,
-  );
+  const edges = marchingSquares({
+    c: 0,
+    resolution: 128,
+    xMax: state.xMax,
+    xMin: state.xMin,
+    yMax: state.yMax,
+    yMin: state.yMin,
+    zFunc: (x, y) => y ** 2 - x ** 3 - state.a * x - state.b,
+  });
 
   const path = [];
   for (let i = 0; i < edges.length; i += 2) {
