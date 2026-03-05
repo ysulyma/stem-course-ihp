@@ -39,7 +39,11 @@ const testRegion = $("#test-region");
 /** button to start the animation */
 const findInverseButton = $("#find-inverse");
 /** button to pause or resume the animation */
-const pauseResumeButton = $("pause-resume");
+const pauseResumeButton = $("#pause-resume");
+/** KaTeX element indicating current lower bound for x */
+const xValue = $("#x-approx");
+/** KaTeX element indicating current value of y */
+const yValue = $("#y-value");
 /* ------------------------- draw the base graph ------------------------- */
 // draw cartesian grid over test region
 const grid = drawCartesianGrid({ xMax: b, xMin: a, yMax: 5, yMin: -5 });
@@ -51,7 +55,15 @@ function update() {
     // whether to show the x guess or not
     document.body.classList.toggle("show-x", state.showX);
     // test region
-    testRegion.setAttribute("width", String((b - a) * 2 ** -state.iteration));
+    const uncertainty = (b - a) * 2 ** -state.iteration;
+    testRegion.setAttribute("width", String(uncertainty));
+    // pause/resume text
+    pauseResumeButton.textContent = state.paused ? "Resume" : "Pause";
+    /* ---------- update KaTeX ---------- */
+    const lowerBound = state.x.toFixed(4);
+    const upperBound = (state.x + uncertainty).toFixed(4);
+    katex.render(String.raw `${lowerBound} \le x \le ${upperBound}`, xValue);
+    katex.render(`y = ${state.y.toFixed(4)}`, yValue);
     /* ---------- update x attributes ---------- */
     const xAttr = String(state.x);
     testRegion.setAttribute("x", xAttr);
@@ -196,10 +208,6 @@ function drawCartesianGrid({ xMin, xMax, yMin, yMax, tickSize = 0.15, }) {
         }),
     ]);
 }
-/** return the array [0, 1, …, n-1] */
-function range(n) {
-    return Array.from({ length: n }).map((_, index) => index);
-}
 /** Graph a parametric function over an interval */
 function graph(f, a = 0, b = 1, sampling = 100) {
     const instructions = range(sampling + 1).map((n) => {
@@ -208,40 +216,15 @@ function graph(f, a = 0, b = 1, sampling = 100) {
     });
     return $svg("path", { class: "plot", d: instructions.join(" ") });
 }
-const { raw } = String;
-// function Widget() {
-//     const svgRef = Object(["useRef"])();
-//     const pauseOrResume = Object(["useMemo"])(() => Object(_mobile__WEBPACK_IMPORTED_MODULE_7__["onClick"])(() => {
-//         setState(prev => {
-//             if (prev.paused) {
-//                 return Object.assign(Object.assign({}, prev), { paused: false, timeout: setTimeout(animate, 1000) });
-//             }
-//             else {
-//                 clearTimeout(prev.timeout);
-//                 return Object.assign(Object.assign({}, prev), { paused: true });
-//             }
-//         });
-//     }), []);
-//     const { x, y } = state;
-//     const classes = [];
-//     if (state.showX)
-//         classes.push("show-x");
-//     return ($svg("div", { class: classes.join(" ") },
-//         $svg("svg", { ref: svgRef, viewBox: "-5 -5 10 10" },
-//             $svg("rect", { class: "test-region", y: -5, height: 10, x: x, width: (b - a) * 2 ** (-state.iteration) }),
-//         $svg("form", { onSubmit: e => e.preventDefault() },
-//             $svg(_lib_MathJax__WEBPACK_IMPORTED_MODULE_6__["MJX"], null, raw `y = \frac{x^5}{120} + e^{x/2}`),
-//             $svg(_lib_MathJax__WEBPACK_IMPORTED_MODULE_6__["MJX"], null, "y=" + y.toFixed(4)),
-//             $svg(_lib_MathJax__WEBPACK_IMPORTED_MODULE_6__["MJX"], { id: "x-approx" }, "x\\approx" + x.toFixed(4)),
-//             $svg("button", Object.assign({}, events), "Find inverse"),
-//             state.showX && ($svg("button", Object.assign({ class: "pause-resume" }, pauseOrResume), state.paused ? "Resume" : "Pause")))));
-// }
-// I don't fully remember why this is here but I think it's to prevent accidental zooming on mobile
+/** return the array [0, 1, …, n-1] */
+function range(n) {
+    return Array.from({ length: n }).map((_, index) => index);
+}
+/* ------------------------- prevent accidental zooming on mobile (I think) ------------------------- */
 document.addEventListener("touchmove", (e) => e.preventDefault(), {
     passive: false,
 });
 document.addEventListener("touchforcechange", (e) => e.preventDefault(), {
     passive: false,
 });
-const anyHover = window.matchMedia("(any-hover: hover)").matches;
 //# sourceMappingURL=script.js.map
