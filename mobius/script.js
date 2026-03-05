@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js";
-import { makeMeshDraggable, screenToScene } from "./three-utils.js";
+import { makeMeshDraggable, screenToScene } from "./drag-utils.js";
 import { makeScene } from "/lib/three-utils.js";
 const mobiusRadius = 2;
 const { cos, sin, PI } = Math, TWOPI = 2 * PI;
@@ -18,17 +18,19 @@ const { camera, controls, renderer, scene } = makeScene({
     controls: OrbitControls,
 });
 // add lights
-const ambientLight = new THREE.AmbientLight(undefined, 0.1);
-scene.add(ambientLight);
-const pointLights = [
-    { decay: 0, intensity: Math.PI, position: [0, 200, 0] },
-    { decay: 0, intensity: Math.PI, position: [100, 200, 100] },
-    { decay: 0, intensity: Math.PI, position: [-100, -200, -100] },
-];
-for (const config of pointLights) {
-    const pointLight = new THREE.PointLight(config.color, config.intensity, config.distance, config.decay);
-    pointLight.position.set(...config.position);
-    scene.add(pointLight);
+{
+    const ambientLight = new THREE.AmbientLight(undefined, 0.1);
+    scene.add(ambientLight);
+    const pointLights = [
+        { decay: 0, intensity: Math.PI, position: [0, 200, 0] },
+        { decay: 0, intensity: Math.PI, position: [100, 200, 100] },
+        { decay: 0, intensity: Math.PI, position: [-100, -200, -100] },
+    ];
+    for (const config of pointLights) {
+        const pointLight = new THREE.PointLight(config.color, config.intensity, config.distance, config.decay);
+        pointLight.position.set(...config.position);
+        scene.add(pointLight);
+    }
 }
 /* populate the scene */
 const elevation = 1.5;
@@ -45,7 +47,7 @@ scene.add(new THREE.AxesHelper(5));
             super();
         }
         getPoint(t, target = new THREE.Vector3()) {
-            return target.set(...mobius(t, 0.5));
+            return target.set(...mobius(t * TWOPI, 0.5));
         }
     }
     const geometry = new THREE.TubeGeometry(new CustomCurve(), 50, 0.02, 50, true);
@@ -60,7 +62,7 @@ scene.add(new THREE.AxesHelper(5));
             super();
         }
         getPoint(t, target = new THREE.Vector3()) {
-            return target.set(...mobius(t, 0.5));
+            return target.set(...mobius(t * TWOPI, 0.5));
         }
     }
     const geometry = new THREE.TubeGeometry(new CustomCurve(), 50, 0.02, 50, true);
@@ -85,7 +87,7 @@ scene.add(new THREE.AxesHelper(5));
 // mobius strip
 {
     const geometry = new ParametricGeometry((theta, t, target) => {
-        target.set(...mobius(theta, t));
+        target.set(...mobius(theta * TWOPI, t));
     }, 50, 50);
     const material = new THREE.MeshPhongMaterial({
         color: totalColor,
@@ -113,7 +115,7 @@ scene.add(new THREE.AxesHelper(5));
             super();
         }
         getPoint(t, target = new THREE.Vector3()) {
-            return target.set(...mobius(t, 0.5 - Math.sin(t * Math.PI) / 2.5));
+            return target.set(...mobius(t * TWOPI, 0.5 - Math.sin(t * Math.PI) / 2.5));
         }
     }
     const geometry = new THREE.TubeGeometry(new CustomCurve(), 50, 0.02, 50, true);
@@ -125,11 +127,14 @@ scene.add(new THREE.AxesHelper(5));
 // drag functionality
 makeMeshDraggable(objects.ball, {
     move: ({ x, y }) => {
+        // convert screen coordinates to scene coordinates
         const pos = screenToScene(x, y, new THREE.Plane(new THREE.Vector3(0, 0, 1)), renderer, camera);
+        // get the corresponding angle in the base space
         const theta = (Math.atan2(pos.y, pos.x) + TWOPI) % TWOPI;
+        // update the base space control
         objects.ball.position.set(mobiusRadius * cos(theta), mobiusRadius * sin(theta), 0);
-        const angle = theta / TWOPI;
-        const [rotation, position] = arrowOrient(new THREE.Vector3(...mobius(angle, 0)), new THREE.Vector3(...mobius(angle, 1)));
+        // update the fiber mesh
+        const [rotation, position] = arrowOrient(new THREE.Vector3(...mobius(theta, 0)), new THREE.Vector3(...mobius(theta, 1)));
         position.z = 1.5;
         objects.fiber.setRotationFromMatrix(rotation);
         objects.fiber.position.copy(position);
@@ -140,9 +145,16 @@ makeMeshDraggable(objects.ball, {
     controls,
     renderer,
 });
-function mobius(theta, t) {
+/**
+ * Get the coordinates in R³ of a point on the Mobius strip,
+ * using the homeomorphism M ~= S¹ x [0, 1]
+ */
+function mobius(
+/** angle in [0, 2π] in the base space S¹ */
+theta, 
+/** fiber coordinate [0, 1] */
+t) {
     const R = mobiusRadius, r = 0.5, n = 1;
-    theta *= TWOPI;
     t = -r + 2 * r * t;
     return [
         cos(theta) * (R - t * sin((theta * n) / 2)),
@@ -150,6 +162,9 @@ function mobius(theta, t) {
         t * cos((theta * n) / 2),
     ];
 }
+/**
+ * Get the orientation and position of a vector pointing from pointX to pointY
+ */
 function arrowOrient(pointX, pointY) {
     const orientation = new THREE.Matrix4();
     orientation.lookAt(pointX, pointY, new THREE.Object3D().up);

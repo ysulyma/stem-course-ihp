@@ -66,6 +66,7 @@
       },
       "suspicious": {
         "noConsole": "off",
+        "noExplicitAny": "off",
         "noImplicitAnyLet": "off"
       }
     }

@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+:root {
+  color-scheme: light dark;
+}
+
 body {
   font-family: sans-serif;
 }
@@ -37,7 +41,7 @@ p {
 }
 
 .total {
-  background: #ffff00;
+  background: light-dark(#ffff00, #aa0);
 }
 
 .section {
