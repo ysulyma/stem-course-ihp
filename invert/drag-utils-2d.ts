@@ -1,20 +1,30 @@
-interface Hit {
-  /** x-coordinate of mouse or touch event */
-  x: number;
-
-  /** y-coordinate of mouse or touch event */
-  y: number;
-}
-
 export interface DragListener {
   move?: (
     e: MouseEvent | TouchEvent,
-    hit: Hit & {
-      /** x-movement since last event */ dx: number /** y-movement since last event */;
+    hit: {
+      /** x-coordinate of mouse or touch event */
+      x: number;
+
+      /** y-coordinate of mouse or touch event */
+      y: number;
+
+      /** x-movement since last event */
+      dx: number;
+
+      /** y-movement since last event */
       dy: number;
     },
   ) => void;
-  down?: (e: MouseEvent | TouchEvent, hit: Hit) => void;
+  down?: (
+    e: MouseEvent | TouchEvent,
+    hit: {
+      /** x-coordinate of mouse or touch event */
+      x: number;
+
+      /** y-coordinate of mouse or touch event */
+      y: number;
+    },
+  ) => void;
   up?: (e: MouseEvent | TouchEvent) => void;
 }
 
