@@ -8,6 +8,7 @@
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "isolatedModules": true,
+    "removeComments": true,
     "verbatimModuleSyntax": true,
     /* Strictness */
     "strict": true,
@@ -17,18 +18,14 @@
     "module": "preserve",
     "sourceMap": true,
     /* If your code runs in the DOM: */
-    "lib": [
-      "es2022",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["es2022", "dom", "dom.iterable"],
     // for ES modules
     "rewriteRelativeImportExtensions": true,
     "baseUrl": ".", // Base directory for resolving non-relative module names
     "paths": {
-      "/*": [
-        "./*"
-      ]
+      "/*": ["./*"]
     }
-  }
+  },
+  "include": ["*/**.ts"],
+  "exclude": ["node_modules"]
 }

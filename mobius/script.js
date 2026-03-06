@@ -5,19 +5,16 @@ import { makeMeshDraggable, screenToScene } from "./drag-utils-3d.js";
 import { makeScene } from "/lib/three-utils.js";
 const mobiusRadius = 2;
 const { cos, sin, PI } = Math, TWOPI = 2 * PI;
-/** objects in our scene */
 const objects = {};
 const container = document.getElementById("container");
-// create scene
 const { camera, controls, renderer, scene } = makeScene({
     camera: {
         position: [3, 0.83, 2.15],
-        up: [0, 0, 1], // math convention
+        up: [0, 0, 1],
     },
     container,
     controls: OrbitControls,
 });
-// add lights
 {
     const ambientLight = new THREE.AmbientLight(undefined, 0.1);
     scene.add(ambientLight);
@@ -32,15 +29,12 @@ const { camera, controls, renderer, scene } = makeScene({
         scene.add(pointLight);
     }
 }
-/* populate the scene */
 const elevation = 1.5;
 const fiberColor = 0x1bbb68;
 const baseColor = 0x1a69b5;
 const totalColor = 0xffff00;
 const sectionColor = 0xff7000;
-// axes helper
 scene.add(new THREE.AxesHelper(5));
-// base circle
 {
     class CustomCurve extends THREE.Curve {
         constructor() {
@@ -55,7 +49,6 @@ scene.add(new THREE.AxesHelper(5));
     const line = new THREE.Mesh(geometry, material);
     scene.add(line);
 }
-// equatorial circle
 {
     class CustomCurve extends THREE.Curve {
         constructor() {
@@ -75,7 +68,6 @@ scene.add(new THREE.AxesHelper(5));
     line.position.z = elevation;
     scene.add(line);
 }
-// ball control
 {
     const geometry = new THREE.SphereGeometry(0.05, 20, 20);
     const material = new THREE.MeshBasicMaterial({ color: baseColor });
@@ -84,7 +76,6 @@ scene.add(new THREE.AxesHelper(5));
     scene.add(mesh);
     objects.ball = mesh;
 }
-// mobius strip
 {
     const geometry = new ParametricGeometry((theta, t, target) => {
         target.set(...mobius(theta * TWOPI, t));
@@ -98,7 +89,6 @@ scene.add(new THREE.AxesHelper(5));
     mesh.position.z = elevation;
     objects.mobius = mesh;
 }
-// fiber
 {
     const geometry = new THREE.CylinderGeometry(0.02, 0.02, 1);
     const material = new THREE.MeshBasicMaterial({ color: fiberColor });
@@ -108,7 +98,6 @@ scene.add(new THREE.AxesHelper(5));
     scene.add(line);
     objects.fiber = line;
 }
-// section
 {
     class CustomCurve extends THREE.Curve {
         constructor() {
@@ -124,16 +113,11 @@ scene.add(new THREE.AxesHelper(5));
     line.position.z = elevation;
     scene.add(line);
 }
-// drag functionality
 makeMeshDraggable(objects.ball, {
     move: ({ x, y }) => {
-        // convert screen coordinates to scene coordinates
         const pos = screenToScene(x, y, new THREE.Plane(new THREE.Vector3(0, 0, 1)), renderer, camera);
-        // get the corresponding angle in the base space
         const theta = (Math.atan2(pos.y, pos.x) + TWOPI) % TWOPI;
-        // update the base space control
         objects.ball.position.set(mobiusRadius * cos(theta), mobiusRadius * sin(theta), 0);
-        // update the fiber mesh
         const [rotation, position] = arrowOrient(new THREE.Vector3(...mobius(theta, 0)), new THREE.Vector3(...mobius(theta, 1)));
         position.z = 1.5;
         objects.fiber.setRotationFromMatrix(rotation);
@@ -145,15 +129,7 @@ makeMeshDraggable(objects.ball, {
     controls,
     renderer,
 });
-/**
- * Get the coordinates in R³ of a point on the Mobius strip,
- * using the homeomorphism M ~= S¹ x [0, 1]
- */
-function mobius(
-/** angle in [0, 2π] in the base space S¹ */
-theta, 
-/** fiber coordinate [0, 1] */
-t) {
+function mobius(theta, t) {
     const R = mobiusRadius, r = 0.5, n = 1;
     t = -r + 2 * r * t;
     return [
@@ -162,9 +138,6 @@ t) {
         t * cos((theta * n) / 2),
     ];
 }
-/**
- * Get the orientation and position of a vector pointing from pointX to pointY
- */
 function arrowOrient(pointX, pointY) {
     const orientation = new THREE.Matrix4();
     orientation.lookAt(pointX, pointY, new THREE.Object3D().up);

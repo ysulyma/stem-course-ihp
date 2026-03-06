@@ -11,6 +11,7 @@
       "**/.hg": true,
       "**/.svn": true,
       "**/Thumbs.db": true,
+      "**/*.js": true,
       "**/*.js.map": true
     },
     "typescript.tsdk": "node_modules/typescript/lib"
