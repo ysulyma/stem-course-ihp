@@ -18,16 +18,15 @@ body {
   padding: 1em;
 }
 
+/* dragging cursors */
 .draggable {
   cursor: grab;
-  cursor: -webkit-grab;
   pointer-events: all;
 }
 
 body.dragging,
 body.dragging .draggable {
   cursor: grabbing;
-  cursor: -webkit-grabbing;
 }
 
 svg {
@@ -176,4 +175,8 @@ button {
 .axis-tick {
   stroke: #777;
   stroke-width: 0.05;
+}
+
+text {
+  user-select: none;
 }
