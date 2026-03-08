@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Desmos: Vector fields and curl</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+    #calculator-wrap {
+      position: relative;
+    }
+    /* desmos */
+    .dcg-container {
+      background: transparent !important;
+    }
+
+    #calculator {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .desmos-dummy {
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      height: 100%;
+      width: 100%;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="calculator-wrap">
+      <div id="calculator" style="height: 100vh; width: 100vw;"></div>
+    </div>
+
+    <script
+      src="https://www.desmos.com/api/v1.11/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"
+    ></script>
+
+    <script src="./script.js" type="module"></script>
+  </body>
+</html>

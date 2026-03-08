@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.4",
+    "@types/desmos": "^1.11.0",
     "@types/katex": "^0.16.8",
     "@types/three": "^0.183.1",
     "serve": "^14.2.6",
