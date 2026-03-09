@@ -7,10 +7,13 @@
     <style>
     #calculator-wrap {
       position: relative;
+      width: 100vw;
+      height: 100vh;
+      margin: 0 auto;
     }
     /* desmos */
     .dcg-container {
-      background: transparent !important;
+      --dcg-custom-background-color: transparent;
     }
 
     #calculator {
@@ -33,7 +36,7 @@
   </head>
   <body>
     <div id="calculator-wrap">
-      <div id="calculator" style="height: 100vh; width: 100vw;"></div>
+      <div id="calculator"></div>
     </div>
 
     <script

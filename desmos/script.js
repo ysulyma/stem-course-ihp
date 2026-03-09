@@ -15,7 +15,7 @@ calculator.setExpressions([
     {
         color: Desmos.Colors.GREEN,
         id: "tb",
-        latex: "\\left|y-.5\\right|=.5\\ \\left\\{0\\le x\\le1\\right\\}",
+        latex: String.raw `\left|y-.5\right|=.5\ \left\{0\le x\le1\right\}`,
     },
     {
         color: Desmos.Colors.GREEN,

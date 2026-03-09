@@ -39,9 +39,11 @@ export function getDummyCanvas(calc: Desmos.Calculator): DummyCanvasAPI {
 
   const ctx = canvas.getContext("2d")!;
 
+  // add a subscription
   const subscribe = (callback: Callback) => {
     subscriptions.push(callback);
 
+    // return a function to unsubscribe
     return () => {
       const index = subscriptions.indexOf(callback);
       if (index !== -1) {
@@ -86,6 +88,7 @@ export function getDummyCanvas(calc: Desmos.Calculator): DummyCanvasAPI {
 
     canvas.width = pixelWidth;
     canvas.height = pixelHeight;
+
     canvas.style.width = `${pixelWidth}px`;
     canvas.style.height = `${pixelHeight}px`;
     canvas.style.left = `${pixelLeft}px`;
